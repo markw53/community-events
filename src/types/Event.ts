@@ -1,9 +1,12 @@
 export interface Event {
-    id?: string;
-    title: string;
-    description: string;
-    date: Date;
-    location: string;
-    createdBy: string;
-    participants: string[];
-  }
+  id?: string;
+  title: string;
+  description: string;
+  date: Date;
+  time: string;
+  location: string;
+  category: string;
+  capacity: number;
+  createdBy: string;
+  participants: string[];
+}
