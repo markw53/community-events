@@ -3,16 +3,14 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBNXNnRKNaPNWarkv2LZzrpHnuwyhXJrA4",
-    authDomain: "community-events-platfor-c94f5.firebaseapp.com",
-    projectId: "community-events-platfor-c94f5",
-    storageBucket: "community-events-platfor-c94f5.firebasestorage.app",
-    messagingSenderId: "604510369427",
-    appId: "1:604510369427:web:c7a3e5f0c6b30dff76ff66",
-    measurementId: "G-6NDMWELPE5"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
-
