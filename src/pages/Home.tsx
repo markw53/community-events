@@ -9,6 +9,7 @@ import {
   Button 
 } from '@mui/material';
 import { EventNote, GroupAdd, CalendarMonth } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
   return (
@@ -82,6 +83,8 @@ const Home: React.FC = () => {
             variant="contained" 
             color="secondary"
             size="large"
+            component={Link}
+            to="/events"
           >
             Latest Events
           </Button>
@@ -89,6 +92,8 @@ const Home: React.FC = () => {
             variant="outlined" 
             color="inherit"
             size="large"
+            component={Link}
+            to="/profile"
           >
             Your Profile
           </Button>
