@@ -14,6 +14,8 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { firestore } from '../../firebase/config';
 import { Event } from '../../types/Event';
 
+// Removed unused dateValue and dateString logic
+
 const EventList: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,10 +35,14 @@ const EventList: React.FC = () => {
 
         setEvents(fetchedEvents);
         setLoading(false);
-      } catch (err: any) {
+      } catch (err: unknown) {
         setError('Failed to fetch events');
         setLoading(false);
-        console.error('Events fetch error:', err);
+        if (err instanceof Error) {
+          console.error('Events fetch error:', err.message);
+        } else {
+          console.error('Events fetch error:', err);
+        }
       }
     };
 
@@ -81,7 +87,7 @@ const EventList: React.FC = () => {
       ) : (
         <Grid container spacing={3}>
           {events.map((event) => (
-            <Grid item xs={12} md={4} key={event.id}>
+            <Grid item={true} xs={12} md={4} key={event.id}>
               <Card elevation={3}>
                 <CardContent>
                   <Typography variant="h5" gutterBottom>
@@ -91,9 +97,17 @@ const EventList: React.FC = () => {
                     {event.description}
                   </Typography>
                   <Box mt={2}>
-                    <Typography variant="body2">
-                      Date: {event.date.toLocaleDateString()}
-                    </Typography>
+                  <Typography variant="body2">
+                    Date: {
+                      event.date
+                        ? typeof event.date === 'string'
+                          ? new Date(event.date).toLocaleDateString()
+                          : event.date instanceof Date
+                            ? event.date.toLocaleDateString()
+                            : ''
+                        : ''
+                    }
+                  </Typography>
                     <Typography variant="body2">
                       Time: {event.time}
                     </Typography>
