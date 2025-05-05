@@ -1,6 +1,6 @@
 # Community Events Platform
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://community-events-online.web.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://brent-events.netlify.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 A modern web application for managing community events using **React**, **TypeScript**, **Firebase**, and **Material-UI**.  
