@@ -1,17 +1,18 @@
 import React from 'react';
-import { 
-  Container, 
-  Typography, 
-  Grid, 
-  Card, 
-  CardContent, 
-  Box, 
-  Button 
-} from '@mui/material';
+
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import { EventNote, GroupAdd, CalendarMonth } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const Home: React.FC = () => {
+  const { currentUser } = useAuth();
   return (
     <Container>
       {/* Welcome Header */}
@@ -21,10 +22,13 @@ const Home: React.FC = () => {
         </Typography>
       </Box>
 
-      {/* Feature Boxes */}
-      <Grid container spacing={3} justifyContent="center" my={4}>
-        <Grid item xs={12} md={4}>
-          <Card elevation={3}>
+      {/* Feature Boxes (centered, 3 per row on desktop) */}
+      <Box maxWidth={1200} mx="auto" my={4}>
+        <Grid 
+          columns={{ xs: 1, sm: 2, md: 3 }} 
+          gap={3}
+        >
+          <Card elevation={3} sx={{ height: '100%' }}>
             <CardContent>
               <EventNote color="primary" sx={{ fontSize: 50, mb: 2 }} />
               <Typography variant="h5" gutterBottom>
@@ -35,9 +39,7 @@ const Home: React.FC = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card elevation={3}>
+          <Card elevation={3} sx={{ height: '100%' }}>
             <CardContent>
               <GroupAdd color="secondary" sx={{ fontSize: 50, mb: 2 }} />
               <Typography variant="h5" gutterBottom>
@@ -48,9 +50,7 @@ const Home: React.FC = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card elevation={3}>
+          <Card elevation={3} sx={{ height: '100%' }}>
             <CardContent>
               <CalendarMonth color="success" sx={{ fontSize: 50, mb: 2 }} />
               <Typography variant="h5" gutterBottom>
@@ -62,7 +62,7 @@ const Home: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-      </Grid>
+      </Box>
 
       {/* User Dashboard Section */}
       <Box 
@@ -71,9 +71,10 @@ const Home: React.FC = () => {
         p={4} 
         borderRadius={2} 
         my={4}
+        textAlign="center"
       >
         <Typography variant="h4" gutterBottom>
-          Welcome back, User!
+          Welcome back, {currentUser?.displayName || 'User'}!
         </Typography>
         <Typography variant="body1" gutterBottom>
           Check out the latest events or view your profile.

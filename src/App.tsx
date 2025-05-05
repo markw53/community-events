@@ -14,6 +14,7 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import EventList from './components/Events/EventList';
 import CreateEvent from './components/Events/CreateEvent';
+import Profile from './pages/Profile';
 
 // Create a theme instance
 const theme = createTheme({
@@ -40,6 +41,7 @@ const App: React.FC = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/events" element={<EventList />} />
             <Route path="/create-event" element={<CreateEvent />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
           <Footer />
         </Router>
