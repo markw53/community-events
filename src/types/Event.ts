@@ -1,8 +1,10 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface Event {
   id?: string;
   title: string;
   description: string;
-  date: Date;
+  date: Timestamp; // <--- Use Firestore's Timestamp object
   time: string;
   location: string;
   category: string;

@@ -1,192 +1,132 @@
+// src/components/Events/CreateEvent.tsx
 import React, { useState } from 'react';
-import { 
-  Container, 
-  Typography, 
-  TextField, 
-  Button, 
-  Box, 
-  Paper, 
-  Select, 
-  MenuItem, 
-  InputLabel, 
-  FormControl 
-} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { addDoc, collection } from 'firebase/firestore';
+import { Container, Typography, TextField, Button, Box, Paper, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import { auth, firestore } from '../../firebase/config';
-import { Event } from '../../types/Event';
+
+const eventCategories = [
+  'Music', 'Sports', 'Arts', 'Technology',
+  'Food', 'Networking', 'Charity', 'Other'
+];
 
 const CreateEvent: React.FC = () => {
-  const [event, setEvent] = useState<Omit<Event, 'id' | 'participants'>>({
-    title: '',
-    description: '',
-    date: new Date(),
-    time: '',
-    location: '',
-    category: '',
-    capacity: 0,
-    createdBy: ''
-  });
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState(''); // format: YYYY-MM-DD
+  const [time, setTime] = useState(''); // format: HH:mm
+  const [location, setLocation] = useState('');
+  const [category, setCategory] = useState('');
+  const [capacity, setCapacity] = useState<number>(0);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setEvent(prev => ({
-      ...prev,
-      [name]: name === 'date' ? new Date(value) : value
-    }));
-  };
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    // Validate form
-    if (!event.title || !event.description || !event.date || !event.location) {
+    if (!title || !description || !date || !time || !location || !category) {
       setError('Please fill in all required fields');
       return;
     }
 
-    try {
-      // Get current user
-      const currentUser = auth.currentUser;
-      if (!currentUser) {
-        throw new Error('User not authenticated');
-      }
+    const [year, month, day] = date.split('-').map(Number);
+    const [hours, minutes] = time.split(':').map(Number);
+    const jsDate = new Date(year, month - 1, day, hours, minutes);
 
-      // Create event document
-      const eventToSubmit = {
-        ...event,
+    if (isNaN(jsDate.getTime())) {
+      setError("Invalid date or time");
+      return;
+    }
+
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      setError("Not authenticated");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await addDoc(collection(firestore, "events"), {
+        title,
+        description,
+        date: Timestamp.fromDate(jsDate),
+        time,
+        location,
+        category,
+        capacity,
         createdBy: currentUser.uid,
         participants: []
-      };
-
-      // Add to Firestore
-      const eventsRef = collection(firestore, 'events');
-      await addDoc(eventsRef, eventToSubmit);
-
-      // Redirect to events list
-      navigate('/events');
-    } catch (err: any) {
-      setError(err.message);
-      console.error('Event creation error:', err);
+      });
+      // Optionally redirect or clear fields here
+      setTitle('');
+      setDescription('');
+      setDate('');
+      setTime('');
+      setLocation('');
+      setCategory('');
+      setCapacity(0);
+      setError('');
+      alert("Event created!");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to create event.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  const eventCategories = [
-    'Music', 'Sports', 'Arts', 'Technology', 
-    'Food', 'Networking', 'Charity', 'Other'
-  ];
-
   return (
     <Container maxWidth="md">
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          marginTop: 4, 
-          padding: 4 
-        }}
-      >
+      <Paper elevation={3} sx={{ marginTop: 4, padding: 4 }}>
         <Typography variant="h4" gutterBottom>
           Create New Event
         </Typography>
-        <Box 
-          component="form" 
-          onSubmit={handleSubmit} 
-          sx={{ width: '100%' }}
-        >
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
           <TextField
-            fullWidth
-            margin="normal"
-            label="Event Title"
-            name="title"
-            value={event.title}
-            onChange={handleChange}
-            required
+            fullWidth margin="normal" label="Event Title" value={title}
+            onChange={e => setTitle(e.target.value)} required
           />
           <TextField
-            fullWidth
-            margin="normal"
-            label="Description"
-            name="description"
-            multiline
-            rows={4}
-            value={event.description}
-            onChange={handleChange}
-            required
+            fullWidth margin="normal" label="Description" multiline rows={4}
+            value={description} onChange={e => setDescription(e.target.value)} required
           />
           <TextField
-            fullWidth
-            margin="normal"
-            label="Date"
-            type="date"
-            name="date"
-            InputLabelProps={{ shrink: true }}
-            value={event.date.toISOString().split('T')[0]}
-            onChange={handleChange}
-            required
+            fullWidth margin="normal" label="Date" type="date" InputLabelProps={{ shrink: true }}
+            value={date} onChange={e => setDate(e.target.value)} required
           />
           <TextField
-            fullWidth
-            margin="normal"
-            label="Time"
-            type="time"
-            name="time"
-            InputLabelProps={{ shrink: true }}
-            value={event.time}
-            onChange={handleChange}
-            required
+            fullWidth margin="normal" label="Time" type="time" InputLabelProps={{ shrink: true }}
+            value={time} onChange={e => setTime(e.target.value)} required
           />
           <TextField
-            fullWidth
-            margin="normal"
-            label="Location"
-            name="location"
-            value={event.location}
-            onChange={handleChange}
-            required
+            fullWidth margin="normal" label="Location"
+            value={location} onChange={e => setLocation(e.target.value)} required
           />
           <FormControl fullWidth margin="normal">
             <InputLabel>Category</InputLabel>
             <Select
-              name="category"
-              value={event.category}
+              value={category}
               label="Category"
-              onChange={handleChange as any}
+              onChange={e => setCategory(e.target.value)}
               required
             >
-              {eventCategories.map((category) => (
-                <MenuItem key={category} value={category}>
-                  {category}
-                </MenuItem>
-              ))}
+              {eventCategories.map(opt => <MenuItem key={opt} value={opt}>{opt}</MenuItem>)}
             </Select>
           </FormControl>
           <TextField
-            fullWidth
-            margin="normal"
-            label="Capacity"
-            type="number"
-            name="capacity"
-            value={event.capacity}
-            onChange={handleChange}
-            inputProps={{ min: 0 }}
+            fullWidth margin="normal" label="Capacity" type="number" inputProps={{ min: 0 }}
+            value={capacity} onChange={e => setCapacity(Number(e.target.value))}
           />
-
-          {error && (
-            <Typography color="error" variant="body2" sx={{ mt: 2 }}>
-              {error}
-            </Typography>
-          )}
-
+          {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
           <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ mt: 3, mb: 2 }}
+            type="submit" variant="contained" color="primary" sx={{ mt: 3, mb: 2 }}
+            disabled={loading}
           >
-            Create Event
+            {loading ? "Creating..." : "Create Event"}
           </Button>
         </Box>
       </Paper>

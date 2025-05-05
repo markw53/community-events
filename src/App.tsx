@@ -5,6 +5,7 @@ import {
   Route 
 } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { AuthProvider } from './contexts/AuthProvider';
 
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
@@ -28,20 +29,22 @@ const theme = createTheme({
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/events" element={<EventList />} />
-          <Route path="/create-event" element={<CreateEvent />} />
-        </Routes>
-        <Footer />
-      </Router>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/events" element={<EventList />} />
+            <Route path="/create-event" element={<CreateEvent />} />
+          </Routes>
+          <Footer />
+        </Router>
+      </ThemeProvider>
+    </AuthProvider>
   );
 };
 
