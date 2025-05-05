@@ -38,10 +38,10 @@ Features include authentication, role-based access control, event creation/joini
   ```
 
 3. **Configure Firebase:**
-    In the FIrebase console, create a new preject.
-    Enable Email/Password authentification.
-    Create a FIrestore database.
-    Copy your Firebase config into a '.env' file:
+    - In the FIrebase console, create a new preject.
+    - Enable Email/Password authentification.
+    - Create a FIrestore database.
+    - Copy your Firebase config into a '.env' file:
 
   ```bash
     VITE_FIREBASE_API_KEY=...
@@ -50,3 +50,5 @@ Features include authentication, role-based access control, event creation/joini
     VITE_FIREBASE_STORAGE_BUCKET=...
     VITE_FIREBASE_MESSAGING_SENDER_ID=...
     VITE_FIREBASE_APP_ID=...
+    ```
+    
