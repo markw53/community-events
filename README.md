@@ -35,6 +35,7 @@ Features include authentication, role-based access control, event creation/joini
 2. **Install dependencies:**
   ```bash
   1 npm install
+  ```
 
 3. **Configure Firebase:**
     In the FIrebase console, create a new preject.
