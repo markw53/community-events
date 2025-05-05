@@ -82,6 +82,7 @@ Features include authentication, role-based access control, event creation/joini
   
 ## 🧑‍💻 Project Structure
 
+```
   src/
 │
 ├── components/
@@ -101,6 +102,7 @@ Features include authentication, role-based access control, event creation/joini
 │   └── index.d.ts
 ├── firebase.ts
 └── App.tsx
+```
 
 ---
 
