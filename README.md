@@ -31,3 +31,21 @@ Features include authentication, role-based access control, event creation/joini
    ```bash
    git clone https://github.com/yourusername/community-events-platform.git
    cd community-events-platform
+
+2. **Install dependencies:**
+  ```bash
+  1 npm install
+
+3. **Configure Firebase:**
+    In the FIrebase console, create a new preject.
+    Enable Email/Password authentification.
+    Create a FIrestore database.
+    Copy your Firebase config into a '.env' file:
+
+  ```bash
+    VITE_FIREBASE_API_KEY=...
+    VITE_FIREBASE_AUTH_DOMAIN=...
+    VITE_FIREBASE_PROJECT_ID=...
+    VITE_FIREBASE_STORAGE_BUCKET=...
+    VITE_FIREBASE_MESSAGING_SENDER_ID=...
+    VITE_FIREBASE_APP_ID=...
