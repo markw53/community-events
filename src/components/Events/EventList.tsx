@@ -7,7 +7,8 @@ import {
 import { collection, getDocs, updateDoc, doc, arrayUnion } from 'firebase/firestore';
 import { firestore } from '../../firebase/config';
 import { Event } from '../../types/Event';
-import { useAuth } from '../../hooks/useAuth'; // or wherever your useAuth is
+import { useAuth } from '../../hooks/useAuth'; 
+import { AddToGoogleCalendarButton } from '../AddToGoogleCalendarButton';
 
 const EventList: React.FC = () => {
   const { currentUser } = useAuth();
@@ -100,6 +101,19 @@ const EventList: React.FC = () => {
                   >
                     {(event.participants || []).includes(currentUser?.uid || '') ? "Joined" : "Join Event"}
                   </Button>
+                  {event.date && (
+                    <AddToGoogleCalendarButton
+                      event={{
+                        title: event.title,
+                        description: event.description,
+                        location: event.location,
+                        start: event.date.toDate(),
+                        end: event.endDate
+                          ? event.endDate.toDate()
+                          : new Date(event.date.toDate().getTime() + 2 * 60 * 60 * 1000), // fallback: +2 hours
+                      }}
+                    />
+                  )}
                 </CardActions>
               </Card>
             </Grid>

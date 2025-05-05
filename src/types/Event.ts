@@ -4,7 +4,8 @@ export interface Event {
   id?: string;
   title: string;
   description: string;
-  date: Timestamp; // <--- Use Firestore's Timestamp object
+  date: Timestamp; 
+  endDate?: Timestamp; 
   time: string;
   location: string;
   category: string;
@@ -12,3 +13,4 @@ export interface Event {
   createdBy: string;
   participants: string[];
 }
+
